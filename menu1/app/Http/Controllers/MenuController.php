@@ -16,15 +16,29 @@ class MenuController extends Controller
 
     public function change(Request $request)
     {
-        $menu = Menu::all();
-        $length = $menu->count();
-        $items = $request->item;
+        $items = $request->items;
+
+        $length = sizeOf($items);
+
+
+       for($x =0; $x <=$length; $x++)
+       {
+            $ids = $items[$x]['children'][0]['id'];
+            dd($ids);
+       }
+
+
+
+      
+       
+
+       
+
+
 
         for($i=1; $i<=$length; $i++)
         {
-            $menu = Menu::find($i);
-            $menu->order = $items[$i-1];
-            $menu->save();
+            Menu::where('id', $items[$i-1])->update(['order' => $i]);
             
         }
         
