@@ -10,7 +10,9 @@ class MenuController extends Controller
 {
     public function index()
     {
+        $t = [];
         $menus = Menu::orderBy('order')->get();
+       
         return view('welcome',compact('menus'));
     }
 
@@ -21,28 +23,24 @@ class MenuController extends Controller
         $length = sizeOf($items);
 
 
-       for($x =0; $x <=$length; $x++)
-       {
-            $ids = $items[$x]['children'][0]['id'];
-            dd($ids);
-       }
-
-
-
-      
-       
-
-       
-
-
+        
 
         for($i=1; $i<=$length; $i++)
         {
+            if(isset($items[$i-1]['children'])){
+
+               $t =  Menu::find($items[$i-1]['children'][0]['id']);
+               $t->parent_id = $items[$i-1]['id'];
+               $t->save();
+            }
+
             Menu::where('id', $items[$i-1])->update(['order' => $i]);
             
         }
         
 
+
+        return $items;
 
         
         
